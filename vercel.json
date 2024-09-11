@@ -1,0 +1,14 @@
+{
+    "builds": [
+      {
+        "src": "api/**/*.ts",
+        "use": "@vercel/node"
+      }
+    ],
+    "build": {
+      "env": {
+        "PYTHON_PATH": "/usr/local/bin/python3"
+      }
+    }
+  }
+  

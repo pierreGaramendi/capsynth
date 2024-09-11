@@ -1,3 +1,5 @@
+import { UrlHandler } from "./ui/urlhandler/url-hanlder";
+
 export default function Home() {
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
@@ -6,12 +8,7 @@ export default function Home() {
         Download YouTube subtitles in various languages and use AI to summarize and interpret key sections.
       </p>
       <div className="flex items-center w-2/4">
-        <input
-          type="text"
-          className="p-3 border border-gray-700 rounded-l-lg w-full bg-gray-800 text-white placeholder-gray-400"
-          placeholder="Enter YouTube video URL"
-        />
-        <button className="p-3 bg-blue-600 text-white rounded-r-lg hover:bg-blue-700">Process</button>
+        <UrlHandler></UrlHandler>
       </div>
     </div>
   );
