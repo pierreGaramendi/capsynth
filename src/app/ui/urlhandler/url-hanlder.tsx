@@ -1,50 +1,54 @@
 "use client";
-
 import { useState } from "react";
+import ExtractButton from "../ExtractButton/ExtractButtonProps";
+import { LinkInput } from "../LinkInput/LinkInput";
+import { ComboboxDemo } from "../CustomCombobox/CustomCombobox";
+import { TextareaCustome } from "../TextAreaCustome/TextareaCustome";
 
 export const UrlHandler = () => {
-  const [videoUrl, setVideoUrl] = useState("");
-  const [result, setResult] = useState<string | null>(null);
+  const [result, setResult] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [videoID, setVideoID] = useState("taiQcrVpXlQ");
+  const [lang, setLang] = useState("es");
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setVideoUrl(e.target.value);
-  };
-
-  const handleButtonClick = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
     try {
-      const response = await fetch("/api/download", {
+      setLoading(true);
+      const response = await fetch("/api/getSubtitles", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: videoUrl }),
+        body: JSON.stringify({ videoID, lang }),
       });
-
       const data = await response.json();
-
       if (response.ok) {
-        setResult(data.message);
+        setResult(data.captions);
+        setLoading(false);
       } else {
         setError(data.error);
+        setLoading(false);
       }
     } catch (error) {
+      setLoading(false);
       setError("An unexpected error occurred.");
     }
   };
 
   return (
     <>
-      <input
-        value={videoUrl}
-        onChange={handleInputChange}
-        type="text"
-        className="p-3 border border-gray-700 rounded-l-lg w-full bg-gray-800 text-white placeholder-gray-400"
-        placeholder="Enter YouTube video URL"
-      />
-      <button onClick={handleButtonClick} className="p-3 bg-blue-600 text-white rounded-r-lg hover:bg-blue-700">
-        Process
-      </button>
-      {result ? <div>{result}</div> : null}
-      {error ? <div>{error}</div> : null}
+      <form onSubmit={handleSubmit} className="flex flex-col items-center space-y-4 w-full">
+        <LinkInput
+          value={videoID}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setVideoID(e.target.value)}
+          disabled={loading}
+        />
+        <ComboboxDemo disabled={loading} selectedValue={lang} onValueChange={(value) => setLang(value)} />
+        <ExtractButton type="submit" isLoading={loading} />
+      </form>
+      {result ? <TextareaCustome className="mt-4" value={result} /> : null}
+      {error ? <div className="text-red-900">{error}</div> : null}
     </>
   );
 };
