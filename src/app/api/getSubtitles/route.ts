@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSubtitles, getVideoDetails } from "youtube-caption-extractor";
+import { getSubtitles } from "youtube-caption-extractor";
 
 export async function POST(request: NextRequest) {
   try {
@@ -7,8 +7,11 @@ export async function POST(request: NextRequest) {
     const captions = await getSubtitles({ videoID, lang });
     const fullCaptions = transformCaptionsToText(captions);
     return NextResponse.json({ captions: fullCaptions });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return NextResponse.json({ error: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ error: "Unknown error occurred" }, { status: 500 });
   }
 }
 
