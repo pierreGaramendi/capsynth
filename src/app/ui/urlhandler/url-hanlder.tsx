@@ -43,6 +43,8 @@ export const UrlHandler = () => {
       <button onClick={handleButtonClick} className="p-3 bg-blue-600 text-white rounded-r-lg hover:bg-blue-700">
         Process
       </button>
+      {result ? <div>{result}</div> : null}
+      {error ? <div>{error}</div> : null}
     </>
   );
 };
