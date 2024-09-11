@@ -6,8 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "postinstall": "pip install yt-dlp"
+    "lint": "next lint"
   },
   "dependencies": {
     "react": "^18",
